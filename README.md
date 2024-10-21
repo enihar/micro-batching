@@ -4,7 +4,7 @@ A simple micro-batching library written in TypeScript
 
 ## Table of Contents
 
-- [Mocro Batching Library](#mocro-batching-library)
+- [Micro Batching Library](#micro-batching-library)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Build](#build)
