@@ -5,7 +5,7 @@ import { MicroBatchProcessor } from '../src';
 
 class MockBatchProcessor implements BatchProcessor<number, number> {
   async process(jobs: number[]): Promise<number[]> {
-    return jobs.map((job) => job * 2); // double each job value
+    return jobs.map((job) => job * job); // Square each job value
   }
 }
 
@@ -30,7 +30,7 @@ describe('MicroBatchProcessor', () => {
     const res2 = await result2;
 
     // Verify the results
-    expect(res1.result).toBe(2);
+    expect(res1.result).toBe(1);
     expect(res2.result).toBe(4);
   });
 
@@ -52,7 +52,7 @@ describe('MicroBatchProcessor', () => {
     const res2 = await result2;
 
     // Verify the results
-    expect(res1.result).toBe(2);
+    expect(res1.result).toBe(1);
     expect(res2.result).toBe(4);
   });
 
@@ -76,7 +76,7 @@ describe('MicroBatchProcessor', () => {
     const res2 = await result2;
 
     // Verify the results
-    expect(res1.result).toBe(2);
+    expect(res1.result).toBe(1);
     expect(res2.result).toBe(4);
   });
 
@@ -103,7 +103,7 @@ describe('MicroBatchProcessor', () => {
     const res2 = await result2;
 
     // Verify the results
-    expect(res1.result).toBe(2);
+    expect(res1.result).toBe(1);
     expect(res2.result).toBe(4);
   });
 
@@ -185,11 +185,11 @@ describe('MicroBatchProcessor', () => {
     const res6 = await result6;
 
     // // Verify the results
-    expect(res1.result).toBe(2);
+    expect(res1.result).toBe(1);
     expect(res2.result).toBe(4);
-    expect(res3.result).toBe(6);
-    expect(res4.result).toBe(8);
-    expect(res5.result).toBe(10);
-    expect(res6.result).toBe(12);
+    expect(res3.result).toBe(9);
+    expect(res4.result).toBe(16);
+    expect(res5.result).toBe(25);
+    expect(res6.result).toBe(36);
   });
 });

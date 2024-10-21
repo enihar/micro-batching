@@ -57,6 +57,10 @@ Make sure that the project is built (`npm run build`) before running the tests. 
 
 ## Core Features
 
+<img width="950" alt="Screenshot 2024-10-20 at 4 43 47 pm" src="https://github.com/user-attachments/assets/8bf2adc0-5dda-4b4d-8674-939e1e04cb22">
+
+
+
 1. **Job Submission (`submitJob`)**
 
    - Allows a caller to submit a single job for processing.
