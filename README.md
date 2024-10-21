@@ -9,6 +9,8 @@ A simple micro-batching library created in TypeScript
   - [Installation](#installation)
   - [Build](#build)
   - [Testing](#testing)
+  - [Core Features](#core-features)
+  - [Future Extension Features](#future-extension-features)
   - [Linting and Formatting](#linting-and-formatting)
     - [Linting](#linting)
     - [Formatting](#formatting)
@@ -53,6 +55,68 @@ npm run test
 
 Make sure that the project is built (`npm run build`) before running the tests. The test files import the compiled code from the `dist` directory.
 
+## Core Features
+
+1. **Job Submission (`submitJob`)**
+
+   - Allows a caller to submit a single job for processing.
+   - Returns a `Promise` that resolves with the result (`JobResult`) after processing.
+   - Jobs are stored in an internal queue (`pendingJobs`) and processed in batches based on configuration.
+   - Jobs submitted during shutdown are rejected.
+
+2. **Batch Processing**
+
+   - Uses the `BatchProcessor` dependency to process accepted jobs in small batches.
+   - A batch is processed either when the configured batch size is reached or after the configured timeout (`batchFrequency`).
+
+3. **Configurable Batching Behavior**
+
+   - `batchSize`: Configurable maximum number of jobs that can be processed in a single batch. Defaults to `10` if not provided.
+   - `batchFrequency`: Configurable time interval (in milliseconds) after which a batch of jobs will be processed if the batch size has not been reached. Defaults to `1000 ms` if not provided.
+   - This allows the client to tune the batching behavior to match their throughput and latency requirements.
+
+4. **Graceful Shutdown (`shutdown`)**
+
+   - The `shutdown()` method ensures that no new jobs are accepted once the shutdown process has started.
+   - Pending jobs in the queue are processed before the system fully shuts down, ensuring that no submitted jobs are lost.
+   - The batch timer is cleared to prevent new batches from starting during shutdown.
+
+5. **Clear Timer Management (`clearBatchTimer`)**
+
+   - Clears the batch timer (`batchTimer`) used to trigger periodic batch processing.
+   - Ensures that no unnecessary or orphaned timers are left running, which could impact system performance.
+
+6. **Robust Error Handling**
+   - Errors during job submission are logged and rejected with an appropriate error message.
+   - Errors during batch processing are handled individually for each job, resolving the job promises with error messages.
+   - This ensures no silent failures, and all job results—successful or failed—are returned appropriately.
+
+## Future Extension Features
+
+1. **Priority Handling for Jobs**
+
+   - Allow jobs to have a priority field, ensuring that high-priority jobs are processed first, enhancing flexibility for different processing requirements.
+
+2. **Retry Logic**
+
+   - Introduce retry logic for jobs that fail due to transient issues, with configurable retry attempts to ensure reliability.
+
+3. **Metrics and Monitoring**
+
+   - Expose metrics such as total jobs processed, batches executed, and errors to provide insight into the system's performance and health.
+
+4. **Persistence for Jobs**
+
+   - Implement persistence for pending jobs to a database, allowing recovery and continuation of processing in the event of a system crash or restart.
+
+5. **Job Cancellation**
+
+   - Allow the ability to cancel pending jobs, providing more control in cases where a job is no longer relevant or needed.
+
+6. **Configurable Backoff Strategy for Retries**
+
+   - Implement an exponential backoff strategy for retries, allowing the system to wait progressively longer between each retry attempt, reducing strain on downstream systems.
+
 ## Linting and Formatting
 
 This project uses ESLint and Prettier for linting and formatting.
@@ -91,7 +155,7 @@ If Husky is working correctly, it will run `npm run lint` and `npm run test` bef
 ## Folder Structure
 
 ```
-your-ts-library/
+micro-batching/
 ├── src/
 │   └── index.ts                # Main source code of the library
 │   └── type.ts                 # TypeScript type definitions for the library
