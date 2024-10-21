@@ -1,6 +1,6 @@
-# Mocro Batching Library
+# Micro Batching Library
 
-A simple micro-batching library created in TypeScript
+A simple micro-batching library written in TypeScript
 
 ## Table of Contents
 
